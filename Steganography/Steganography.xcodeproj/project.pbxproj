@@ -25,6 +25,8 @@
 /* Begin PBXFileReference section */
 		FAB49B2026079781004486DA /* Steganography */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Steganography; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAB49B2326079781004486DA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		FAB49B2B26087E8B004486DA /* origin.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = origin.bmp; sourceTree = "<group>"; };
+		FAB49B2D2608FBAF004486DA /* hi.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = hi.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,8 @@
 		FAB49B2226079781004486DA /* Steganography */ = {
 			isa = PBXGroup;
 			children = (
+				FAB49B2D2608FBAF004486DA /* hi.txt */,
+				FAB49B2B26087E8B004486DA /* origin.bmp */,
 				FAB49B2326079781004486DA /* main.cpp */,
 			);
 			path = Steganography;
