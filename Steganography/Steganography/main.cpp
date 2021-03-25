@@ -73,16 +73,37 @@ int main(int argc, const char * argv[]) {
         printf("%c ", buffer[i]);
     }
     
-    int arrIndex = 0;
+    int bIndex = 0;
     
     char inputText[] = "hi i'm seongJu";
+    cout << endl;
+    
     for (int i = 0; inputText[i] != '\0'; i++) {
         cout << i ;
         cout << inputText[i] ;
         cout << bitset<8>(inputText[i]) << endl;
+        bitset<8> t = bitset<8>(inputText[i]);
+        int k = 1;
+        bitset<8> b;
         
-        for (int j = 6; j<8; j++) {
-            printf("arrIndex: %d", arrIndex);
+        for (int j = 7; j>=0; j--) {
+            if (j%2 == 1) {
+                b = bitset<8>(buffer[bIndex]);
+            }
+                
+            cout <<"바꾸기 전: ";
+            cout << b << endl;
+            
+            printf("%d: ", j);
+            cout << t[j] << endl;
+            b.set(k, t[j]);
+            k = (k + 1) % 2;
+            
+            if (k == 1) {
+                cout << "바뀐 비트: " ;
+                cout << b << endl;
+                bIndex++;
+            }
             
         }
     }
