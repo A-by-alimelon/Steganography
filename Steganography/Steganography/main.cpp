@@ -13,23 +13,25 @@
 using namespace std;
 
 void encoding(string);
+void decoding();
 
 int main(int argc, const char * argv[]) {
     if (argc < 2) {
         exit(1);
     }
-    
+
     char option = *argv[1];
     
     if (option == 'e') {
         encoding(argv[2]);
+    } else if (option == 'd') {
+        decoding();
     }
     
     return 0;
 }
 
 void encoding(string s) {
-    ifstream readFile;
     FILE *fd;
     
     fd = fopen("origin.bmp", "rb");
@@ -55,13 +57,6 @@ void encoding(string s) {
     
     cout << bfType << endl;
     
-//    for (int i = 0; i < 4; i++) {
-//        printf("%d ", i);
-//        printf("%x ", bfSize[i]);
-//    }
-    
-//    int size = static_cast<int>(bfSize);
-    
     char bm[] = "BM";
 
     if ( strcmp(bm, bfType) != 0 ) {
@@ -74,20 +69,9 @@ void encoding(string s) {
     
     int num = 0;
     num = static_cast<int>(startOffset[0]);
-    printf("hi %d", num);
     
     fseek(fd, num, SEEK_SET);
     fread(buffer, lSize, 1, fd);
-  
-    cout << "" << endl;
-    
-//    for (int i = 0; i < 100; i++) {
-//        printf("%d: ", i);
-//        printf("%x ", buffer[i]);
-//        printf("%c ", buffer[i]);
-//    }
-    
-    
     
     FILE *output;
     output = fopen("output.bmp", "wb");
@@ -143,4 +127,66 @@ void encoding(string s) {
     fclose(fd);
     fclose(output);
     
+}
+
+void decoding() {
+    FILE *fd;
+    
+    fd = fopen("output.bmp", "rb");
+    if (fd == NULL) {
+        fputs("File error", stderr);
+        exit(1);
+    }
+    
+    fseek(fd, 0, SEEK_END);
+    long lSize = ftell(fd);
+    
+    unsigned char *buffer = (unsigned char*)malloc(lSize + 1);
+    memset(buffer, 0, lSize + 1);
+    
+    char bfType[2];
+    unsigned char startOffset[4];
+    
+    fseek(fd, 0, SEEK_SET);
+    fread(bfType, 2, 1, fd);
+    
+    fseek(fd, 10, SEEK_SET);
+    fread(startOffset, 4, 1, fd);
+    
+    char bm[] = "BM";
+
+    if ( strcmp(bm, bfType) != 0 ) {
+        cout << "bmp 파일이 아닙니다." << endl;
+        exit(1);
+    }
+    
+    int num = 0;
+    num = static_cast<int>(startOffset[0]);
+    
+    fseek(fd, num, SEEK_SET);
+    fread(buffer, lSize, 1, fd);
+    
+    bitset<8> c;
+    c.set();
+    int index = 0;
+    
+    for (int i = 0; i < lSize; i++) {
+        index = i % 8;
+//        cout << "--" ;
+//        cout << index << endl;
+        
+        bitset<8> b = bitset<8>(buffer[i/2]);
+        
+//        cout << 7-index << endl;
+        c.set(7-index, b[(i+1)%2]);
+        
+        if (index == 7) {
+            unsigned char a = static_cast<unsigned char>(c.to_ulong());
+            if (a < 32 || a > 127) {
+                cout << endl;
+                exit(1);
+            }
+            cout << a;
+        }
+    }
 }
