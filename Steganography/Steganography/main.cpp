@@ -54,12 +54,11 @@ void encoding(string s) {
     fread(bfSize, 4, 1, fd);
     
     cout << bfType << endl;
-    cout << "bfSize" << endl;
     
-    for (int i = 0; i < 4; i++) {
-        printf("%d ", i);
-        printf("%x ", bfSize[i]);
-    }
+//    for (int i = 0; i < 4; i++) {
+//        printf("%d ", i);
+//        printf("%x ", bfSize[i]);
+//    }
     
 //    int size = static_cast<int>(bfSize);
     
@@ -78,20 +77,29 @@ void encoding(string s) {
     printf("hi %d", num);
     
     fseek(fd, num, SEEK_SET);
-    fread(buffer, 100, 1, fd);
+    fread(buffer, lSize, 1, fd);
   
     cout << "" << endl;
     
-    for (int i = 0; i < 100; i++) {
-        //sizeof로 하면 배열의 크기인 100자까지 나오므로 null값인 \0까지 for문 반복
-        printf("%d: ", i);
-        printf("%x ", buffer[i]);
-        printf("%c ", buffer[i]);
-    }
+//    for (int i = 0; i < 100; i++) {
+//        printf("%d: ", i);
+//        printf("%x ", buffer[i]);
+//        printf("%c ", buffer[i]);
+//    }
+    
+    
+    
+    FILE *output;
+    output = fopen("output.bmp", "wb");
+    
+    // output.bmp 에 origin.bmp 복사
+    fseek(fd, 0, SEEK_SET);
+    unsigned char *header = (unsigned char*)malloc(lSize + 1);
+    fread(header, lSize, 1, fd);
+    fwrite(header, 1, lSize, output);
     
     int bIndex = 0;
-    
-    //char inputText[] = "hi i'm seongJu";
+
     string inputText = s;
     cout << endl;
     
@@ -124,4 +132,11 @@ void encoding(string s) {
             
         }
     }
+    
+
+    
+    
+    fclose(fd);
+    fclose(output);
+    
 }
