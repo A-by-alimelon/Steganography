@@ -12,7 +12,7 @@
 
 using namespace std;
 
-void encoding();
+void encoding(string);
 
 int main(int argc, const char * argv[]) {
     if (argc < 2) {
@@ -22,63 +22,13 @@ int main(int argc, const char * argv[]) {
     char option = *argv[1];
     
     if (option == 'e') {
-        encoding();
+        encoding(argv[2]);
     }
     
-    //
-    //    printf("%x ", bfType[0]);
-    //    printf("%x ", bfSize[0]);
-    
-    //    for (int i = 0; bfType[i]!='\0'; i++) {
-    //        //sizeof로 하면 배열의 크기인 100자까지 나오므로 null값인 \0까지 for문 반복
-    //        printf("%x ", bfType[i]);
-    //    }
-    
-    //    for (int i = 0; i < 2; i++) {
-    //        //sizeof로 하면 배열의 크기인 100자까지 나오므로 null값인 \0까지 for문 반복
-    //        printf("%d ", i);
-    //        printf("%x ", bfSize[i]);
-    //    }
-    
-    
-    
-    //    readFile.open("origin.bmp", ios::binary);
-    //    assert(readFile.is_open());
-    //
-    //    readFile.read((char*)&bfType, 2);
-    //
-    //    for (int i = 0; i < sizeof(bfType) / sizeof(char); i++) {
-    //        printf("%c\n", bfType[i]);
-    //    }
-    //
-    //    readFile.read((char*)&bfSize, sizeof(bfSize));
-    //
-    //    cout << "=====" << endl;
-    //
-    //    for (int i = 0; i < sizeof(bfSize) / sizeof(char); i++) {
-    //        printf("%d", i);
-    //        printf("%c\n", bfSize[i]);
-    //    }
-    //
-    //    cout << bfType << endl;
-    //    cout << bfSize << endl;
-    
-    //    if (readFile.is_open()) {
-    //        cout << "is open" << endl;
-    //        while (!readFile.eof()) {
-    //            char arr[10000];
-    //            readFile.read((char*)&arr, sizeof(arr));
-    //            cout << arr << endl;
-    //        }
-    //    } else {
-    //        cout << "no" << endl;
-    //    }
-    //
-    //    readFile.close();
     return 0;
 }
 
-void encoding() {
+void encoding(string s) {
     ifstream readFile;
     FILE *fd;
     
@@ -141,7 +91,8 @@ void encoding() {
     
     int bIndex = 0;
     
-    char inputText[] = "hi i'm seongJu";
+    //char inputText[] = "hi i'm seongJu";
+    string inputText = s;
     cout << endl;
     
     for (int i = 0; inputText[i] != '\0'; i++) {
