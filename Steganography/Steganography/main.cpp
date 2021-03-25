@@ -22,6 +22,7 @@ int main(int argc, const char * argv[]) {
 
     char option = *argv[1];
     
+    // 프로그램 옵션에 따른 함수 실행
     if (option == 'e') {
         encoding(argv[2]);
     } else if (option == 'd') {
@@ -34,6 +35,7 @@ int main(int argc, const char * argv[]) {
 void encoding(string s) {
     FILE *fd;
     
+    // 파일 열기
     fd = fopen("origin.bmp", "rb");
     if (fd == NULL) {
         fputs("File error", stderr);
@@ -43,6 +45,7 @@ void encoding(string s) {
     fseek(fd, 0, SEEK_END);
     long lSize = ftell(fd);
     
+    // 파일 크기 만큼의 버퍼 생성
     unsigned char *buffer = (unsigned char*)malloc(lSize + 1);
     memset(buffer, 0, lSize + 1);
     
@@ -55,10 +58,9 @@ void encoding(string s) {
     fseek(fd, 2, SEEK_SET);
     fread(bfSize, 4, 1, fd);
     
-    cout << bfType << endl;
-    
     char bm[] = "BM";
 
+    // bmp 파일인지 확인
     if ( strcmp(bm, bfType) != 0 ) {
         cout << "bmp 파일이 아닙니다." << endl;
         exit(1);
@@ -70,6 +72,7 @@ void encoding(string s) {
     int num = 0;
     num = static_cast<int>(startOffset[0]);
     
+    // 데이터 영역 읽기
     fseek(fd, num, SEEK_SET);
     fread(buffer, lSize, 1, fd);
     
@@ -85,14 +88,10 @@ void encoding(string s) {
     int bIndex = 0;
 
     string inputText = s;
-    cout << endl;
-    
     fseek(output, num, SEEK_SET);
     
+    // 스테가노 그래피 적용
     for (int i = 0; inputText[i] != '\0'; i++) {
-        cout << i ;
-        cout << inputText[i] ;
-        cout << bitset<8>(inputText[i]) << endl;
         bitset<8> t = bitset<8>(inputText[i]);
         int k = 1;
         bitset<8> b;
@@ -102,27 +101,17 @@ void encoding(string s) {
                 b = bitset<8>(buffer[bIndex]);
             }
                 
-            cout <<"바꾸기 전: ";
-            cout << b << endl;
-            
-            printf("%d: ", j);
-            cout << t[j] << endl;
             b.set(k, t[j]);
             k = (k + 1) % 2;
             
             if (k == 1) {
-                cout << "바뀐 비트: " ;
-                cout << b << endl;
                 unsigned char c = static_cast<unsigned char>(b.to_ulong());
-                printf("%x\n", c);
                 fwrite(&c, sizeof(c), 1, output);
-                //fseek(output, sizeof(c), SEEK_CUR);
                 bIndex++;
             }
             
         }
     }
-
     
     fclose(fd);
     fclose(output);
@@ -132,6 +121,7 @@ void encoding(string s) {
 void decoding() {
     FILE *fd;
     
+    // 파일 열기
     fd = fopen("output.bmp", "rb");
     if (fd == NULL) {
         fputs("File error", stderr);
@@ -155,6 +145,7 @@ void decoding() {
     
     char bm[] = "BM";
 
+    // bmp 파일인지 확인
     if ( strcmp(bm, bfType) != 0 ) {
         cout << "bmp 파일이 아닙니다." << endl;
         exit(1);
@@ -166,22 +157,21 @@ void decoding() {
     fseek(fd, num, SEEK_SET);
     fread(buffer, lSize, 1, fd);
     
+    // 비트를 읽어와 문자 출력
     bitset<8> c;
     c.set();
     int index = 0;
     
     for (int i = 0; i < lSize; i++) {
         index = i % 8;
-//        cout << "--" ;
-//        cout << index << endl;
-        
         bitset<8> b = bitset<8>(buffer[i/2]);
-        
-//        cout << 7-index << endl;
+
         c.set(7-index, b[(i+1)%2]);
         
         if (index == 7) {
             unsigned char a = static_cast<unsigned char>(c.to_ulong());
+            
+            // 아스키코드 범위 확인
             if (a < 32 || a > 127) {
                 cout << endl;
                 exit(1);
@@ -189,4 +179,5 @@ void decoding() {
             cout << a;
         }
     }
+    fclose(fd);
 }
