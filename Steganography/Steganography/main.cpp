@@ -103,6 +103,8 @@ void encoding(string s) {
     string inputText = s;
     cout << endl;
     
+    fseek(output, num, SEEK_SET);
+    
     for (int i = 0; inputText[i] != '\0'; i++) {
         cout << i ;
         cout << inputText[i] ;
@@ -127,14 +129,16 @@ void encoding(string s) {
             if (k == 1) {
                 cout << "바뀐 비트: " ;
                 cout << b << endl;
+                unsigned char c = static_cast<unsigned char>(b.to_ulong());
+                printf("%x\n", c);
+                fwrite(&c, sizeof(c), 1, output);
+                //fseek(output, sizeof(c), SEEK_CUR);
                 bIndex++;
             }
             
         }
     }
-    
 
-    
     
     fclose(fd);
     fclose(output);
